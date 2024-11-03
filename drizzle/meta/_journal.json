@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1730459210494,
+      "tag": "0000_uneven_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1730471574142,
+      "tag": "0001_puzzling_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1730524185555,
+      "tag": "0002_empty_leech",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1730541384625,
+      "tag": "0003_premium_gamma_corps",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1730614117873,
+      "tag": "0004_secret_christian_walker",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1730614895475,
+      "tag": "0005_spotty_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1730640509671,
+      "tag": "0006_sloppy_meggan",
+      "breakpoints": true
+    }
+  ]
+}
