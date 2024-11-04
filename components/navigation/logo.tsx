@@ -4,7 +4,7 @@ export default function Logo() {
         width="189"
         height="10"
         viewBox="0 0 189 10"
-        className="fill-secondary-foreground hover:fill-secondary-foreground/75 transition-all duration-500 ease-in-out cursor-pointer"
+        className="fill-stone-900 hover:fill-stone-900/75 dark:fill-stone-50 dark:hover:fill-stone-50/75 transition-all duration-500 ease-in-out cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g clipPath="url(#clip0_158_7)">

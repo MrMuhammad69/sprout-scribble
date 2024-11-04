@@ -5,6 +5,7 @@ import Nav from "@/components/navigation/nav";
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react"
+import { ThemeProvider } from "@/components/providers/theme.providers";
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -21,13 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <SessionProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={cn('px-6 md:px-12 max-w-7xl mx-auto', `${inter.className}`)}
         >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Nav />
           {children}
+          </ThemeProvider>
         </body>
       </html>
     </SessionProvider>

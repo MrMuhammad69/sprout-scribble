@@ -12,6 +12,10 @@ import bcrypt from "bcrypt";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.AUTH_SECRET!,
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/error',
+  },
   session: {
     strategy: "jwt",
   },
@@ -28,48 +32,60 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async signIn({ user, account, profile, email, credentials }) {
-      // Add custom sign-in error handling if needed
-      if (!user) {
-        return "/auth/error?error=InvalidCredentials";
+    async signIn({ user, account, profile, email }) {
+      if (!user.email) return false;
+
+      if (account?.provider === "google" || account?.provider === "github") {
+        const existingUser = await db.query.users.findFirst({
+          where: eq(users.email, user.email)
+        });
+
+        // If user exists but used different provider
+        if (existingUser && !existingUser.emailVerified) {
+          // Update the user's email verification status
+          await db.update(users)
+            .set({ emailVerified: new Date() })
+            .where(eq(users.email, user.email));
+          return true;
+        }
+
+        // If no existing user, allow sign up
+        if (!existingUser) {
+          return true;
+        }
       }
-      return true; // Continue if the user exists
+      
+      return true;
     }
   },
   providers: [
     google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
+      allowDangerousEmailAccountLinking: false,
     }),
     github({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
+      allowDangerousEmailAccountLinking: false,
     }),
     Credentials({
       authorize: async (credentials) => {
         const validatedFields = loginSchema.safeParse(credentials);
-        if (!validatedFields.success) {
-          return null; // Return null for invalid credentials
-        }
+        if (!validatedFields.success) return null;
 
         const { email, password } = validatedFields.data;
         const user = await db.query.users.findFirst({
           where: eq(users.email, email),
         });
 
-        if (!user || !user.password) {
-          return null; // Return null for non-existent or invalid user
-        }
+        if (!user || !user.password) return null;
 
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-          return null; // Return null if password does not match
-        }
+        if (!passwordMatch) return null;
 
         return user;
       },
     }),
-  ],
+  ]
 });
