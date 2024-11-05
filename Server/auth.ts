@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 import { accounts, users } from "./schema";
 import bcrypt from "bcrypt";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authConfig = {
   adapter: DrizzleAdapter(db),
   secret: process.env.AUTH_SECRET!,
   pages: {
@@ -21,40 +21,49 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async session({ session, token }) {
-      if(session.user && token.sub) {
-        session.user.id = token.sub
-      }
-      if(session.user && token.role) {
-        session.user.role = token.role as string
+      if (token.sub) {
+        // Always fetch fresh user data from the database
+        const currentUser = await db.query.users.findFirst({
+          where: eq(users.id, token.sub)
+        });
 
+        if (currentUser) {
+          session.user = {
+            ...session.user,
+            id: currentUser.id,
+            name: currentUser.name,
+            email: currentUser.email,
+            image: currentUser.image,
+            role: currentUser.role,
+            twoFactorEnabled: currentUser.twoFactorEnabled,
+            isOAuth: token.isOAuth,
+          };
+        }
       }
-      if(session.user){
-        session.user.twoFactorEnabled = token.twoFactorEnabled as boolean
-        session.user.image = token.image as string | null
-        session.user.isOAuth = token.isOAuth as boolean
-        session.user.name = token.name as string
-        session.user.email = token.email as string
-
-      }
-      return session
+      return session;
     },
     async jwt({ token }) {
-      if(!token.sub) return token
+      if(!token.sub) return token;
+      
+      // Always fetch fresh user data
       const existingUser = await db.query.users.findFirst({
         where: eq(users.id, token.sub)
-      })
-      if(!existingUser) return token
+      });
+      
+      if(!existingUser) return token;
+      
       const existingAccount = await db.query.accounts.findFirst({
         where: eq(accounts.userId, existingUser.id)
-      })
-      if(!existingAccount) return token
-      token.isOAuth = !!existingAccount
-      token.name = existingUser.name
-      token.email = existingUser.email
-      token.role = existingUser.role
-      token.twoFactorEnabled = existingUser.twoFactorEnabled
-      token.image = existingUser.image || undefined
-      return token
+      });
+
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      token.twoFactorEnabled = existingUser.twoFactorEnabled;
+      token.image = existingUser.image;
+      
+      return token;
     },
     async signIn({ user, account, profile, email }) {
       if (!user.email) return false;
@@ -112,4 +121,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ]
-});
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

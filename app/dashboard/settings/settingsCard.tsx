@@ -32,12 +32,15 @@ import { FormSuccess } from "@/components/auth/FormSuccess"
 import { useState } from "react"
 import { useAction } from "next-safe-action/hooks"
 import { setting } from "@/Server/actons/settings"
+import { UploadButton } from "@/app/api/uploadthing/upload"
+import { useRouter } from "next/navigation"
 
 type SettingsFrom = {
     session:Session
 }
 
 export default function SettingsCard(session: SettingsFrom){
+    const router = useRouter()
     const form = useForm<z.infer<typeof SettingsSchema>>({
         resolver:zodResolver(SettingsSchema),
         defaultValues:{
@@ -54,17 +57,49 @@ export default function SettingsCard(session: SettingsFrom){
     const [avatarUploading, setAvatarUploading] = useState(false)
     const {execute, status} = useAction(setting, {
         onSuccess: (data) => {
-            if(data?.success) setSuccess(data.success)
+            if(data?.success) {
+                setSuccess(data.success)
+                if(data.redirect) {
+                    // Force a hard refresh to get new session data
+                    router.refresh()
+                    window.location.reload()
+                }
+            }
             if(data?.error) setError(data.error || "Something went wrong")
         },
         onError: (error) => {
             setError("Something went wrong")
         }
-
     })
-    const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
-        execute(values)
+    const onSubmit = async (values: z.infer<typeof SettingsSchema>) => {
+        console.log("Submitting values:", values); // Log form values
+        try {
+            await execute(values);
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setError("Failed to update settings");
+        }
     }
+
+    const handleUploadComplete = async (res: any) => {
+        if (res?.[0]?.url) {
+            console.log("Upload complete, URL:", res[0].url); // Log upload URL
+            form.setValue("image", res[0].url);
+            setAvatarUploading(false);
+            
+            // Get all current form values
+            const values = form.getValues();
+            console.log("Submitting values after upload:", values); // Log form values
+            
+            try {
+                await execute(values);
+            } catch (error) {
+                console.error("Upload complete submission error:", error);
+                setError("Failed to update settings");
+            }
+        }
+    }
+
     return (
         <Card>
   <CardHeader>
@@ -110,7 +145,28 @@ export default function SettingsCard(session: SettingsFrom){
                 {form.getValues("image") && (
                     <Image src={form.getValues("image")!} alt="User image" width={42} height={42} className="rounded-full" />
                 )}
-
+                 <UploadButton
+                      className="scale-75 ut-button:ring-primary  ut-label:bg-red-50  ut-button:bg-primary/75  hover:ut-button:bg-primary/100 ut:button:transition-all ut-button:duration-500  ut-label:hidden ut-allowed-content:hidden"
+                      endpoint="avatarUploader"
+                      onUploadBegin={() => {
+                        setAvatarUploading(true)
+                      }}
+                      onUploadError={(error) => {
+                        form.setError("image", {
+                          type: "validate",
+                          message: error.message,
+                        })
+                        setAvatarUploading(false)
+                        return
+                      }}
+                      onClientUploadComplete={handleUploadComplete}
+                      content={{
+                        button({ ready }) {
+                          if (avatarUploading) return "Uploading..."
+                          return "Change Avatar"
+                        },
+                      }}
+                    />
               </div>
               <FormControl >
                 <Input placeholder="User image" type="hidden" disabled={status === "executing" || session.session.user?.isOAuth === true} {...field} />
