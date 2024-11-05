@@ -84,7 +84,8 @@ export const users = pgTable("user", {
       id: text("id").notNull().$defaultFn(()=> createId()),
       token: text("token").notNull(),
       expires: timestamp("expires", { mode: "date" }).notNull(),
-      email: text('email').notNull()
+      email: text('email').notNull(),
+      userId: text('userId').notNull().references(() => users.id, { onDelete: "cascade" })
     },
     (emailToken) => ({
       compositePk: primaryKey({

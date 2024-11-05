@@ -2,7 +2,8 @@
 
 import { eq } from "drizzle-orm"
 import { db } from ".."
-import { emailTokens, passwordResetTokens, users } from "../schema"
+import { emailTokens, passwordResetTokens, TwoFactorTokens, users } from "../schema"
+import crypto from "crypto"
 
 export const getVerificationTokenByEmail = async (email: string) => {
     const verificationToken = await db.query.emailTokens.findFirst({
@@ -100,4 +101,60 @@ export const verifyPasswordResetToken = async (token: string) => {
     }
     
     return { success: "Token valid", email: existingToken.email }
+}
+
+export const getTwoFactorTokenByEmail = async (email: string) => {
+    try {
+        const twoFactorToken = await db.query.TwoFactorTokens.findFirst({
+            where: eq(TwoFactorTokens.email, email)
+        });
+        
+        if (!twoFactorToken) {
+            return null;
+        }
+        
+        return twoFactorToken;
+    } catch (error) {
+        console.error("Two factor token error:", error);
+        return null;
+    }
+}
+export const getTwoFactorTokenByToken = async (token: string) => {
+   try {
+    const twoFactorToken = await db.query.TwoFactorTokens.findFirst({
+        where: eq(TwoFactorTokens.token, token)
+    })
+    return twoFactorToken
+   } catch (error) {
+    return {error: 'We are sorry for inconvenience, please try again later'} 
+   }
+}
+
+export const generateTwoFactorToken = async (email: string) => {
+    const token = crypto.randomInt(100000, 999999).toString()
+    const expires = new Date(Date.now() + 3600 * 1000)
+
+    const existingUser = await db.query.users.findFirst({
+        where: eq(users.email, email)
+    })
+    
+    if (!existingUser) {
+        return null;
+    }
+
+    const existingToken = await getTwoFactorTokenByEmail(email)
+    if(existingToken){
+        await db.delete(TwoFactorTokens).where(eq(TwoFactorTokens.id, existingToken.id))
+    }
+
+    const twoFactorToken = await db.insert(TwoFactorTokens)
+        .values({
+            email,
+            token,
+            expires,
+            userId: existingUser.id
+        })
+        .returning()
+
+    return twoFactorToken
 }

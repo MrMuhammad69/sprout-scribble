@@ -1,4 +1,5 @@
 'use client'
+
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import {
@@ -12,15 +13,15 @@ import {
   import { Avatar, AvatarFallback } from "../ui/avatar"
   import Image from 'next/image'
 import { LogOut, Moon, Settings, Sun, TruckIcon } from "lucide-react"
-import router from "next/router"
+import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useState } from "react"
 import { Switch } from "../ui/switch"
-import { check } from "drizzle-orm/pg-core"
 
 export default function UserButton({ user }: Session) {
     const { theme, setTheme } = useTheme()
     const [checked, setChecked] = useState(false)
+    const router = useRouter()
     function setSwitchTheme(){
         switch(theme){
             case 'dark':
@@ -74,7 +75,7 @@ export default function UserButton({ user }: Session) {
                     </span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="group py-2 font-medium cursor-pointer transition-all duration-500 hover:bg-primary/10">
+                <DropdownMenuItem onClick={()=> router.push('/dashboard/orders')} className="group py-2 font-medium cursor-pointer transition-all duration-500 hover:bg-primary/10">
                     <TruckIcon size={14} className="mr-3 group-hover:translate-x-1 transition-all duration-300" /> My orders
                 </DropdownMenuItem>
                 
