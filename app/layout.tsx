@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react"
 import { ThemeProvider } from "@/components/providers/theme.providers";
+import Toaster from "@/components/ui/toast";
+
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -21,16 +24,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
 
+  return (
     <SessionProvider>
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn('px-6 md:px-12 max-w-7xl mx-auto', `${inter.className}`)}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Nav />
-          {children}
+            <Nav />
+            <Toaster />
+            {children}
           </ThemeProvider>
         </body>
       </html>

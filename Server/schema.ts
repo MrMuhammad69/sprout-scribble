@@ -6,6 +6,8 @@ import {
     integer,
     boolean,
     pgEnum,
+    serial,
+    real,
   } from "drizzle-orm/pg-core"
   import type { AdapterAccount } from "next-auth/adapters"
   import {createId} from '@paralleldrive/cuid2'
@@ -93,6 +95,14 @@ export const users = pgTable("user", {
       }),
     })
   )
+
+  export const products = pgTable("products", {
+    id:serial('id').primaryKey(),
+    description: text("description").notNull(),
+    title: text("title").notNull(),
+    created: timestamp("createdAt").defaultNow(),
+    price: real("price").notNull(),
+  })
 
   
 
