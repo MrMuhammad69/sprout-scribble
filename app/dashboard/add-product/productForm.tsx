@@ -27,10 +27,43 @@ import { DollarSign } from "lucide-react"
 import Tiptap from "./tipTap"
 import { createProduct } from "@/Server/actons/CreateProduct"
 import { useAction } from "next-safe-action/hooks"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
+import { getProduct } from "@/Server/actons/GetProduct"
+import { useEffect, useState } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function ProductForm() {
+    const [loading, setLoading] = useState(false )
+    const searchParams = useSearchParams()
+    const editMode = searchParams.get("id")
+
+    const checkProduct = async (id: number) => {
+        if (editMode) {
+            const { error, success } = await getProduct(parseInt(editMode))
+            if (error) {
+                toast.error(error)
+                router.push("/dashboard/products")
+                setLoading(false)
+                return
+            }
+            if (success) {
+                const id = parseInt(editMode)
+                form.setValue("title", success.title)
+                form.setValue("description", success.description)
+                form.setValue("price", success.price)
+                form.setValue("id", id)
+            }
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if(editMode) {
+            checkProduct(parseInt(editMode))
+        }
+    }, [editMode])
+
     const form = useForm<z.infer<typeof ProductSchema>>({
         resolver: zodResolver(ProductSchema),
         defaultValues: {
@@ -71,62 +104,80 @@ export default function ProductForm() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Add Product</CardTitle>
-                <CardDescription>Add a new product to the store</CardDescription>
+                <CardTitle>{editMode ? <span>
+                    Edit Prodcut
+                </span>: <span>
+                    Create Product</span>}</CardTitle>
+                <CardDescription>{editMode? <span>
+                    Edit The Product in your Store
+                </span>: <span>
+                Add a new product to the store</span>}</CardDescription>
             </CardHeader>
             <CardContent>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Title</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Title of your Product" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Tiptap val={field.value} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Price of the Product</FormLabel>
-                                    <FormControl>
-                                        <div className="flex items-center gap-2">
-                                            <DollarSign size={32} className="p-2 rounded-md bg-violet-100" />
-                                            <Input
-                                                type="number"
-                                                placeholder="Product price"
-                                                {...field}
-                                                onChange={(e) => field.onChange(Number(e.target.value))}
-                                            />
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <Button disabled={status === "executing" || !form.formState.isValid || !form.formState.isDirty} type="submit">Submit</Button>
-                    </form>
-                </Form>
+                {loading ? (
+                    <div className="space-y-8">
+                        <Skeleton className="w-full h-10 rounded-md" /> {/* Title Skeleton */}
+                        <Skeleton className="w-full h-32 rounded-md" /> {/* Description Skeleton */}
+                        <div className="flex items-center gap-2">
+                            <Skeleton className="w-8 h-8 rounded-full" /> {/* Dollar Sign Skeleton */}
+                            <Skeleton className="w-full h-10 rounded-md" /> {/* Price Skeleton */}
+                        </div>
+                        <Skeleton className="w-32 h-10 rounded-md" /> {/* Button Skeleton */}
+                    </div>
+                ) : (
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Title</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Title of your Product" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Tiptap val={field.value} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Price of the Product</FormLabel>
+                                        <FormControl>
+                                            <div className="flex items-center gap-2">
+                                                <DollarSign size={32} className="p-2 rounded-md bg-violet-100" />
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Product price"
+                                                    {...field}
+                                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button disabled={status === "executing" || !form.formState.isValid || !form.formState.isDirty} type="submit">{editMode? "Save Changes": "Create Product"}</Button>
+                        </form>
+                    </Form>
+                )}
             </CardContent>
         </Card>
     )

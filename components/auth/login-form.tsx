@@ -173,8 +173,8 @@ export const LoginForm = () => {
             )}
             disabled={status === 'executing'}
           >
-            { showTwoFactor && status === 'executing' ? 'Verifying...' : 'Verify'}
-            { !showTwoFactor && status === 'executing' ? 'Logging in...' : 'Login'}
+            {showTwoFactor && status === 'executing'? "Verifying...": "Verify"}
+            {!showTwoFactor && status === 'executing'? "Logging in...": "Login"}
 
           </Button>
         </form>
