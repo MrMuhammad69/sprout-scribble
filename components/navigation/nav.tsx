@@ -4,17 +4,21 @@ import UserButton from './userButton'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { LogIn } from 'lucide-react'
+import CartDrawer from '../cart/cart-drawer'
 export default async function Nav(){
     const session = await auth()
     
     return(
         <header className=' py-8 '>
             <nav>
-                <ul className='flex justify-between items-center'>
-                    <li>
+                <ul className='flex justify-between items-center md:gap-8 gap-4 md:flex-row flex-col'>
+                    <li className='flex flex-1'>
                         <Link href='/'>
                             <Logo />
                         </Link>
+                    </li>
+                    <li className='relative flex items-center hover:bg-muted'>
+                        <CartDrawer />
                     </li>
                     <li>
                         {!session ? (
