@@ -1,19 +1,20 @@
-'use client'
+"use client"
 
 import { ColumnDef, Row } from "@tanstack/react-table"
-import Image from "next/image"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
 import { MoreHorizontal, PlusCircle } from "lucide-react"
-import { deleteProduct } from "@/Server/actons/DeleteProduct"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 import { useAction } from "next-safe-action/hooks"
+import { deleteProduct } from "@/Server/actons/DeleteProduct"
 import { toast } from "sonner"
 import Link from "next/link"
 import { VariantsWithImagesTags } from "@/lib/inferType"
@@ -25,17 +26,15 @@ import {
 } from "@/components/ui/tooltip"
 import ProductVariant from "./ProductVariant"
 
-
-type Product = { 
-    id: number
-    title: string
-    description: string
-    price: number
-    variants: VariantsWithImagesTags[]
-    image: string
+type ProductColumn = {
+  title: string
+  price: number
+  image: string
+  variants: VariantsWithImagesTags[]
+  id: number
 }
 
-const ActionCell = ({ row }: { row: Row<Product> }) => {
+const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
   const { status, execute } = useAction(deleteProduct, {
     onSuccess: (data) => {
       if (data?.error) {
@@ -50,7 +49,7 @@ const ActionCell = ({ row }: { row: Row<Product> }) => {
     },
     onSettled: () => {
       toast.dismiss()
-    }
+    },
   })
   const product = row.original
 
@@ -78,15 +77,14 @@ const ActionCell = ({ row }: { row: Row<Product> }) => {
   )
 }
 
-export const columns: ColumnDef<Product>[] = [
-
+export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "id",
-    header: "ID"
+    header: "ID",
   },
   {
     accessorKey: "title",
-    header: "Title"
+    header: "Title",
   },
   {
     accessorKey: "variants",
@@ -139,31 +137,38 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "price",
-     header: "Price",
-     cell: ({row}) => {
-        const price = parseFloat(row.getValue("price"))
-        const formatted = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD"
-        }).format(price)
-        return (<div className="font-medium text-sm">
-            {formatted}
-        </div>)
-     }
+    header: "Price",
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price"))
+      const formatted = new Intl.NumberFormat("en-US", {
+        currency: "USD",
+        style: "currency",
+      }).format(price)
+      return <div className="font-medium text-xs">{formatted}</div>
+    },
   },
   {
     accessorKey: "image",
     header: "Image",
-    cell: ({row}) => {
-        const cellImage = row.getValue("image") as string
-        const cellTitle = row.getValue("title") as string
-        return <Image src={cellImage} alt={cellTitle} width={50} height={50} className="rounded-md" />
-    }
+    cell: ({ row }) => {
+      const cellImage = row.getValue("image") as string
+      const cellTitle = row.getValue("title") as string
+      return (
+        <div className="">
+          <Image
+            src={cellImage}
+            alt={cellTitle}
+            width={50}
+            height={50}
+            className="rounded-md"
+          />
+        </div>
+      )
+    },
   },
   {
     id: "actions",
     header: "Actions",
-    cell: ActionCell
-  }
-
+    cell: ActionCell,
+  },
 ]

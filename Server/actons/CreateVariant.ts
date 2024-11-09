@@ -7,8 +7,13 @@ import { productVariants, variantImages, variantTags } from "../schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
+import algoliasearch from "algoliasearch"
 const action = createSafeActionClient()
-
+const client = algoliasearch(
+  process.env.ALGOLIA_APP_ID!,
+process.env.NEXT_PUBLIC_ALGOLIA_SEARCH!
+)
+  const algoliaIndex = client.initIndex('PRODUCTS')
 export const CreateVariant = action(
   VariantSchema,
   async ({
@@ -32,6 +37,9 @@ export const CreateVariant = action(
           })
           .where(eq(productVariants.id, id))
           .returning()
+          const product = await db.query.products.findFirst({
+            where: eq(productVariants.id, productID)
+          })
 
         if (editVariant.length === 0) {
           throw new Error("Variant not found")
@@ -57,6 +65,12 @@ export const CreateVariant = action(
             order: idx,
           }))
         )
+        algoliaIndex.partialUpdateObject({
+          objectID: editVariant[0].id.toString(),
+          id: editVariant[0].productID,
+          productType: editVariant[0].productType,
+          variantImages: newImages[0].url,
+        })
 
         revalidatePath("/dashboard/products")
         return { success: `Edited Variant ${productType}` }
@@ -71,6 +85,9 @@ export const CreateVariant = action(
             productID,
           })
           .returning()
+          const product = await db.query.products.findFirst({
+            where: eq(productVariants.id, productID)
+          })
 
         if (newVariant.length === 0) {
           throw new Error("Failed to create new variant")
@@ -93,7 +110,16 @@ export const CreateVariant = action(
             order: idx,
           }))
         )
-
+        if (product) {
+          algoliaIndex.saveObject({
+            objectID: newVariant[0].id.toString(),
+            id: newVariant[0].productID,
+            title: product.title,
+            price: product.price,
+            productType: newVariant[0].productType,
+            variantImages: newImages[0].url,
+          })
+        }
         revalidatePath("/dashboard/products")
         return { success: `Created new Variant ${productType}` }
 

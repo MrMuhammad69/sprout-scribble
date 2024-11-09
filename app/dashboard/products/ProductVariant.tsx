@@ -87,6 +87,7 @@ export default function ProductVariant({
         },
         onSuccess: (data) => {
             if (data.success) {
+                form.reset()
                 toast.success(data.success) // Show success message
             } else if (data.error) {
                 toast.error(data.error) // Show error message
