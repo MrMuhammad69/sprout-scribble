@@ -10,8 +10,9 @@ import {AnimatePresence, motion} from 'framer-motion'
 import Lottie from 'lottie-react'
 import emptybox from '@/public/empty-box.json'
 import { createId } from "@paralleldrive/cuid2"
+import { Button } from "../ui/button"
 export default function CartItems() {
-    const {cart, addToCart, removeFromCart} = useCartStore()
+    const {cart, addToCart, removeFromCart, setCheckoutProgress} = useCartStore()
     const totalPrice = useMemo(()=> {
         return cart.reduce((acc, item)=>{
             return acc + item.price * item.variant.quantity
@@ -22,6 +23,7 @@ export default function CartItems() {
             return {letter, id: createId()}
         })
     },[totalPrice])
+    
 
     return(
         <motion.div>
@@ -34,7 +36,8 @@ export default function CartItems() {
                 </div>
             )}
             {cart.length > 0 && (
-                <Table>
+              <div className="h-[13rem] overflow-y-auto">
+                <Table className="min-w-4xl mx-auto">
                     <TableHeader>
                         <TableRow>
                             <TableCell>
@@ -102,9 +105,10 @@ export default function CartItems() {
                         ))}
                     </TableBody>
                 </Table>
+                </div>
             )}
             <motion.div className="flex items-center justify-center relative overflow-hidden">
-                <span className="text-md">Total: $</span>
+                <span className="text-md mt-1 font-bold">Total: $</span>
                 <AnimatePresence mode="popLayout">
                 {priceInLetters.map((letter, i) => (
             <motion.div key={letter.id}>
@@ -113,7 +117,7 @@ export default function CartItems() {
                 animate={{ y: 0 }}
                 exit={{ y: -20 }}
                 transition={{ delay: i * 0.1 }}
-                className="text-md inline-block"
+                className="text-md inline-block mt-1 font-bold"
               >
                 {letter.letter}
               </motion.span>
@@ -121,6 +125,11 @@ export default function CartItems() {
           ))}
                 </AnimatePresence>
             </motion.div>
+            <Button disabled={cart.length === 0} onClick={()=> {
+              setCheckoutProgress('payment-page')
+            }} className="w-full mt-4">
+              Go to Checkout
+            </Button>
         </motion.div>
     )
 
