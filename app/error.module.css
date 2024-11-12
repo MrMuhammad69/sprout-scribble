@@ -1,0 +1,136 @@
+
+  .errorContainer {
+    background: var(--main-color);
+  }
+  
+  .loading .errorCode,
+  .loading .errorMessage {
+    margin-top: 0;
+    opacity: 0;
+    transition: opacity 0.5s linear, margin-top 0.5s linear;
+  }
+  
+  .errorCode {
+    margin: 100px auto 0 auto;
+    color: var(--stroke-color);
+    font-family: 'Encode Sans Semi Condensed', Verdana, sans-serif;
+    font-size: 10rem;
+    line-height: 10rem;
+    font-weight: 200;
+    text-align: center;
+  }
+  
+  .errorMessage {
+    margin: 20px auto 30px auto;
+    font-family: 'Encode Sans Semi Condensed', Verdana, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 200;
+    text-align: center;
+  }
+  
+  .gears {
+    position: relative;
+    margin: 0 auto;
+    width: auto;
+    height: 0;
+  }
+  
+  .gear {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--stroke-color);
+  }
+  
+  .gear:before {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    content: "";
+    border-radius: 50%;
+    background: var(--main-color);
+  }
+  
+  .gear:after {
+    position: absolute;
+    left: 25px;
+    top: 25px;
+    content: "";
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 5px solid var(--stroke-color);
+    background: var(--main-color);
+  }
+  
+  .gear.one {
+    left: -130px;
+    animation: anticlockwiseErrorStop 2s linear infinite;
+  }
+  
+  .gear.two {
+    top: -75px;
+    animation: anticlockwiseError 2s linear infinite;
+  }
+  
+  .gear.three {
+    top: -235px;
+    left: 130px;
+    animation: clockwiseError 2s linear infinite;
+  }
+  
+  .bar {
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    width: 150px;
+    height: 30px;
+    margin-top: -15px;
+    border-radius: 5px;
+    background: var(--stroke-color);
+  }
+  
+  .bar:before {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    content: "";
+    border-radius: 2px;
+    background: var(--main-color);
+  }
+  
+  .bar:nth-child(2) {
+    transform: rotate(60deg);
+  }
+  
+  .bar:nth-child(3) {
+    transform: rotate(120deg);
+  }
+  @keyframes clockwise {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
+  @keyframes anticlockwise {
+    0% { transform: rotate(360deg);}
+    100% { transform: rotate(0deg);}
+  }
+  @keyframes clockwiseError {
+    0% { transform: rotate(0deg);}
+    20% { transform: rotate(30deg);}
+    40% { transform: rotate(25deg);}
+    60% { transform: rotate(30deg);}
+    100% { transform: rotate(0deg);}
+  }
+  @keyframes anticlockwiseErrorStop {
+    0% { transform: rotate(0deg);}
+    20% { transform: rotate(-30deg);}
+    60% { transform: rotate(-30deg);}
+    100% { transform: rotate(0deg);}
+  }
+  

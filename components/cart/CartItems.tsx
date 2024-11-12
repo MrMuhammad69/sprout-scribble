@@ -56,7 +56,7 @@ export default function CartItems() {
                     </TableHeader>
                     <TableBody>
                         {cart.map((item) => (
-                            <TableRow key={item.id}>
+                            <TableRow key={(item.id + item.variant.variantID).toString()}>
                                 <TableCell>
                                     {item.name}
                                 </TableCell>

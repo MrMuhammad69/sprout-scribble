@@ -1,6 +1,10 @@
-'use client'
-import { useEffect } from "react";
-
+'use client';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import styles from './error.module.css'; // Importing CSS module
+import { cn } from "@/lib/utils";
+import { CircleX } from "lucide-react";
 export default function Error({
     error,
     reset
@@ -8,16 +12,41 @@ export default function Error({
     error: Error,
     reset: () => void
 }) {
-    useEffect(() => {
-        console.log('Error')
-    }, [error])
-    return (
-        <div className="w-full min-h-full flex items-center justify-center flex-col">
-            <h1 className="text-4xl font-bold">
-                {error.message }
-            </h1>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={() => reset()}>Try Again</button>
+    const [loading, setLoading] = useState(true);
 
+
+    return (
+        <div className="w-full h-full flex items-center justify-center flex-col my-3 p-10">
+            <motion.div
+                className="text-4xl font-bold  text-destructive"
+            >
+                <div className={` ${styles.errorContainer}`}>
+                    <h1 className={styles.errorCode}>We are Sorry
+                    </h1>
+                    
+                    <h2 className={cn(styles.errorMessage, 'text-xl')}>{error.message} Please report us if the issue persists @ibneabdullatifjud@gmail.com <b>:(</b></h2>
+                    <div className={styles.gears}>
+                        <div className={`${styles.gear} ${styles.one}`}>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                        </div>
+                        <div className={`${styles.gear} ${styles.two}`}>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                        </div>
+                        <div className={`${styles.gear} ${styles.three}`}>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                            <div className={styles.bar}></div>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+            <Button onClick={() => reset()} className="bg-destructive hover:bg-destructive/50">
+                Try Again Later
+            </Button>
         </div>
-    )
+    );
 }

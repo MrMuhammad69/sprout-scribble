@@ -26,7 +26,7 @@ export default function RootLayout({
     <SessionProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={cn('px-6 md:px-12 max-w-7xl mx-auto', `${roboto.className}`)}
+          className={cn('px-6 md:px-12 max-w-[1440px] mx-auto', `${roboto.className}`)}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Nav />

@@ -11,15 +11,18 @@ export default async function Nav(){
     return(
         <header className=' py-8 '>
             <nav>
-                <ul className='flex justify-between items-center md:gap-8 gap-4 md:flex-row flex-col'>
+                <ul className='flex justify-between items-center md:gap-8 gap-4 md:flex-row '>
                     <li className='flex flex-1'>
                         <Link href='/'>
                             <Logo />
                         </Link>
                     </li>
-                    <li className='relative flex items-center hover:bg-muted'>
+                    {session &&(
+                        <li className='relative flex items-center hover:bg-muted'>
                         <CartDrawer />
                     </li>
+                    )}
+                    
                     <li>
                         {!session ? (
                             <Button asChild>

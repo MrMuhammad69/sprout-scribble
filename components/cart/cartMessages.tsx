@@ -17,7 +17,7 @@ export default function CartMessage(){
             {checkoutProgress === 'cart-page' && ' View and Edit your Bag'}
                 {checkoutProgress === 'payment-page' && <span className="flex items-center justify-center cursor-pointer hover:text-primary" onClick={() => setCheckoutProgress('cart-page')}>
                     <ArrowLeft /> Head Back to cart </span>}
-                {checkoutProgress === 'confirmation-page' && 'Order Confirmed'}
+                {checkoutProgress === 'confirmation-page' && 'You will receive an email with your receipt.'}
             </DrawerDescription>
 
         </motion.div>
