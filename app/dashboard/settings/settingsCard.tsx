@@ -38,6 +38,8 @@ import { useRouter } from "next/navigation"
 type SettingsFrom = {
     session:Session
 }
+type UploadResponse = { url?: string }[];
+
 
 export default function SettingsCard(session: SettingsFrom){
     const router = useRouter()
@@ -81,7 +83,7 @@ export default function SettingsCard(session: SettingsFrom){
         }
     }
 
-    const handleUploadComplete = async (res: any) => {
+    const handleUploadComplete = async (res:  UploadResponse) => {
         if (res?.[0]?.url) {
             console.log("Upload complete, URL:", res[0].url); // Log upload URL
             form.setValue("image", res[0].url);
@@ -215,8 +217,8 @@ export default function SettingsCard(session: SettingsFrom){
             </FormItem>
           )}
         />
-        <FormError message={error} />
-        <FormSuccess message={success} />
+        <FormError message={error || "Unknown Error"} />
+        <FormSuccess message={success|| "Be happy" }  />
         <Button type="submit" disabled={status === "executing" || avatarUploading}>Update Your Settings</Button>
       </form>
     </Form>

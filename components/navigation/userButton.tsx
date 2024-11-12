@@ -97,10 +97,12 @@ export default function UserButton({ user }: Session) {
                         <Sun size={14} className="absolute group-hover:text-yellow-600 group-hover:rotate-180 dark:scale-0 dark:-rotate-90 transition-all duration-300 ease-in-out"/>
                         <Moon size={14} className="group-hover:text-blue-400 group-hover:rotate-180  transition-all duration-300 ease-in-out dark:scale-100 scale-0"/>
                         </div>
-                        
-                        <p className="dark:text-blue-400 text-secondary-foreground/75  text-yellow-600">
+                        {theme && (
+                             <p className="dark:text-blue-400 text-secondary-foreground/75  text-yellow-600">
                              {theme?.[0].toUpperCase() + theme?.slice(1)} mode
                         </p>
+                        )}
+                       
                         <Switch checked={checked} className="scale-75 ml-2" onCheckedChange={(e)=> {
                             setChecked((prev) => !prev)
                             if(e) setTheme("dark")
