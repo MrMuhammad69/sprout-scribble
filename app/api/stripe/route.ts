@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const charge = retrieveOrder.latest_charge as Stripe.Charge;
 
     // Introduce a delay before updating the database
-    await new Promise(resolve => setTimeout(resolve, 1000)); // 10-second delay
+    await new Promise(resolve => setTimeout(resolve, 5000)); // 10-second delay
 
     await db
       .update(orders)
