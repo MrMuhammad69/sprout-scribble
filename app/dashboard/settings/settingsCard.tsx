@@ -54,8 +54,8 @@ export default function SettingsCard(session: SettingsFrom){
     },
   });
   console.log(session.session.user);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [avatarUploading, setAvatarUploading] = useState(false);
   const {execute, status} = useAction(setting, {
     onSuccess: (data) => {
@@ -217,8 +217,8 @@ export default function SettingsCard(session: SettingsFrom){
                 </FormItem>
               )}
             />
-            <FormError message={error || 'Unknown Error'} />
-            <FormSuccess message={success|| 'Be happy' }  />
+            <FormError message={error} />
+            <FormSuccess message={success}  />
             <Button type="submit" disabled={status === 'executing' || avatarUploading}>Update Your Settings</Button>
           </form>
         </Form>
