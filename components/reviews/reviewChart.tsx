@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { ReviewsWithUser } from "@/lib/inferType"
-import { Card, CardDescription, CardTitle } from "../ui/card"
-import Stars from "./stars"
-import { getReviewAverage } from "./reviewAverage"
-import { useMemo } from "react"
-import { Progress } from "../ui/progress"
+import { ReviewsWithUser } from '@/lib/inferType';
+import { Card, CardDescription, CardTitle } from '../ui/card';
+import Stars from './stars';
+import { getReviewAverage } from './reviewAverage';
+import { useMemo } from 'react';
+import { Progress } from '../ui/progress';
 
 export default function ReviewChart({
   reviews,
@@ -13,19 +13,19 @@ export default function ReviewChart({
   reviews: ReviewsWithUser[]
 }) {
   const getRatingByStars = useMemo(() => {
-    const ratingValues = Array.from({ length: 5 }, () => 0)
-    const totalReviews = reviews.length
+    const ratingValues = Array.from({ length: 5 }, () => 0);
+    const totalReviews = reviews.length;
     reviews.forEach((review) => {
-      const starIndex = review.rating - 1
+      const starIndex = review.rating - 1;
       if (starIndex >= 0 && starIndex < 5) {
-        ratingValues[starIndex]++
+        ratingValues[starIndex]++;
       }
-    })
-    console.log(ratingValues)
-    return ratingValues.map((rating) => (rating / totalReviews) * 100)
-  }, [reviews])
+    });
+    console.log(ratingValues);
+    return ratingValues.map((rating) => (rating / totalReviews) * 100);
+  }, [reviews]);
 
-  const totalRating = getReviewAverage(reviews)
+  const totalRating = getReviewAverage(reviews);
   return (
     <Card className="flex flex-col p-8 rounded-md gap-4 mt-4">
       <div className="flex flex-col gap-2">
@@ -43,5 +43,5 @@ export default function ReviewChart({
         </div>
       ))}
     </Card>
-  )
+  );
 }

@@ -1,0 +1,31 @@
+{
+    "extends": [
+      "next/core-web-vitals",
+      "eslint:recommended"
+    ],
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "no-unused-vars": "off",
+      "no-console": "off",
+      "quotes": ["error", "single"],
+      "jsx-quotes": ["error", "prefer-double"],
+      "semi": ["error", "always"],
+      "indent": ["error", 2],
+      "comma-dangle": ["error", "always-multiline"],
+      "no-undef": "off",
+      "no-case-declarations": "off"
+    }
+  }

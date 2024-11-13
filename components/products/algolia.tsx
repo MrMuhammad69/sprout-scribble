@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import { InstantSearchNext } from "react-instantsearch-nextjs"
-import { SearchBox, Hits } from "react-instantsearch"
-import Link from "next/link"
-import Image from "next/image"
-import { Card } from "../ui/card"
-import { useMemo, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { searchClient } from "@/lib/AlgoliaClient"
-
+import { InstantSearchNext } from 'react-instantsearch-nextjs';
+import { SearchBox, Hits } from 'react-instantsearch';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Card } from '../ui/card';
+import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { searchClient } from '@/lib/AlgoliaClient';
+import algoliasearch from 'algoliasearch';
 function Hit({
   hit,
 }: {
@@ -63,13 +63,13 @@ function Hit({
         </div>
       </Link>
     </div>
-  )
+  );
 }
 
 export default function Algolia() {
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(false);
 
-  const MCard = useMemo(() => motion(Card), [])
+  const MCard = useMemo(() => motion(Card), []);
   return (
     <InstantSearchNext
       future={{
@@ -77,22 +77,26 @@ export default function Algolia() {
         preserveSharedStateOnUnmount: true,
       }}
       indexName="PRODUCTS"
-      searchClient={searchClient}
+      searchClient={algoliasearch(
+        'D5QYNOIPF7',
+        '5cfa3b355ff16c00a2ceb34c11bb6c0b',
+      ) as unknown as import('algoliasearch-helper/types/algoliasearch').SearchClient}
+      
     >
       <div className="relative">
         <SearchBox
           onFocus={() => setActive(true)}
           onBlur={() => {
             setTimeout(() => {
-              setActive(false)
-            }, 100)
+              setActive(false);
+            }, 100);
           }}
           classNames={{
             input:
-              " h-full w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-            submitIcon: "hidden",
-            form: "relative mb-4",
-            resetIcon: "hidden",
+              ' h-full w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+            submitIcon: 'hidden',
+            form: 'relative mb-4',
+            resetIcon: 'hidden',
           }}
         />
         <AnimatePresence>
@@ -109,5 +113,5 @@ export default function Algolia() {
         </AnimatePresence>
       </div>
     </InstantSearchNext>
-  )
+  );
 }

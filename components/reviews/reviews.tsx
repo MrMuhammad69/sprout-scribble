@@ -1,16 +1,16 @@
-import { db } from "@/Server"
-import Review from "./review"
-import ReviewsForm from "./reviews-form"
-import { desc, eq } from "drizzle-orm"
-import { reviews } from "@/Server/schema"
-import ReviewChart from "./reviewChart"
+import { db } from '@/Server';
+import Review from './review';
+import ReviewsForm from './reviews-form';
+import { desc, eq } from 'drizzle-orm';
+import { reviews } from '@/Server/schema';
+import ReviewChart from './reviewChart';
 
 export default async function Reviews({ productID }: { productID: number }) {
   const data = await db.query.reviews.findMany({
     with: { user: true },
     where: eq(reviews.productID, productID),
     orderBy: [desc(reviews.created)],
-  })
+  });
 
   return (
     <section className="py-4">
@@ -23,5 +23,5 @@ export default async function Reviews({ productID }: { productID: number }) {
         </div>
       </div>
     </section>
-  )
+  );
 }

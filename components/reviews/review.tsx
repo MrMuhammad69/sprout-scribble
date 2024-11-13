@@ -1,10 +1,10 @@
-"use client"
-import { ReviewsWithUser } from "@/lib/inferType"
-import { motion } from "framer-motion"
-import { Card } from "../ui/card"
-import Image from "next/image"
-import { formatDistance, subDays } from "date-fns"
-import Stars from "./stars"
+'use client';
+import { ReviewsWithUser } from '@/lib/inferType';
+import { motion } from 'framer-motion';
+import { Card } from '../ui/card';
+import Image from 'next/image';
+import { formatDistance, subDays } from 'date-fns';
+import Stars from './stars';
 
 export default function Review({ reviews }: { reviews: ReviewsWithUser[] }) {
   return (
@@ -16,8 +16,8 @@ export default function Review({ reviews }: { reviews: ReviewsWithUser[] }) {
               className="rounded-full"
               width={32}
               height={32}
-              alt={review.user.name}
-              src={review.user?.image}
+              alt={review.user.name as string} 
+              src={review.user?.image as string}
             />
             <div>
               <p className="text-sm font-bold">{review.user.name}</p>
@@ -33,6 +33,6 @@ export default function Review({ reviews }: { reviews: ReviewsWithUser[] }) {
         </Card>
       ))}
     </motion.div>
-  )
+  );
 }
 

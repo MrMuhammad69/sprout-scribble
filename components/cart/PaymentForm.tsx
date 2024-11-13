@@ -1,57 +1,57 @@
-"use client"
+'use client';
 
-import { useCartStore } from "@/lib/clientStore"
+import { useCartStore } from '@/lib/clientStore';
 import {
   AddressElement,
   PaymentElement,
   useElements,
   useStripe,
-} from "@stripe/react-stripe-js"
-import { Button } from "../ui/button"
-import { useState } from "react"
-import { createPaymentIntent } from "@/Server/actons/createPaymentInstance"
-import { useAction } from "next-safe-action/hooks"
-import { createOrder } from "@/Server/actons/createOrder"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+} from '@stripe/react-stripe-js';
+import { Button } from '../ui/button';
+import { useState } from 'react';
+import { createPaymentIntent } from '@/Server/actons/createPaymentInstance';
+import { useAction } from 'next-safe-action/hooks';
+import { createOrder } from '@/Server/actons/createOrder';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
-  const stripe = useStripe()
-  const elements = useElements()
-  const { cart, setCheckoutProgress, clearCart, setCartOpen } = useCartStore()
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const router = useRouter()
+  const stripe = useStripe();
+  const elements = useElements();
+  const { cart, setCheckoutProgress, clearCart, setCartOpen } = useCartStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
   const { execute } = useAction(createOrder, {
     onSuccess: (data) => {
       if (data.error) {
-        toast.error(data.error)
+        toast.error(data.error);
       }
       if (data.success) {
-        setIsLoading(false)
-        toast.success(data.success)
-        setCheckoutProgress("confirmation-page")
-        clearCart()
+        setIsLoading(false);
+        toast.success(data.success);
+        setCheckoutProgress('confirmation-page');
+        clearCart();
       }
     },
-  })
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     if (!stripe || !elements) {
-      setIsLoading(false)
-      return
+      setIsLoading(false);
+      return;
     }
-    const { error: submitError } = await elements.submit()
+    const { error: submitError } = await elements.submit();
     if (submitError) {
-      setErrorMessage(submitError.message!)
-      setIsLoading(false)
-      return
+      setErrorMessage(submitError.message!);
+      setIsLoading(false);
+      return;
     }
     const { data } = await createPaymentIntent({
       amount: totalPrice,
-      currency: "usd",
+      currency: 'usd',
       cart: cart.map((item) => ({
         quantity: item.variant.quantity,
         productID: item.id,
@@ -59,32 +59,32 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
         price: item.price,
         image: item.image,
       })),
-    })
+    });
     if (data?.error) {
-      setErrorMessage(data.error)
-      setIsLoading(false)
-      router.push("/auth/login")
-      setCartOpen(false)
-      return
+      setErrorMessage(data.error);
+      setIsLoading(false);
+      router.push('/auth/login');
+      setCartOpen(false);
+      return;
     }
     if (data?.success) {
       const { error } = await stripe.confirmPayment({
         elements,
         clientSecret: data.success.clientSecretID!,
-        redirect: "if_required",
+        redirect: 'if_required',
         confirmParams: {
-          return_url: "http://localhost:3000/success",
+          return_url: 'http://localhost:3000/success',
           receipt_email: data.success.user as string,
         },
-      })
+      });
       if (error) {
-        setErrorMessage(error.message!)
-        setIsLoading(false)
-        return
+        setErrorMessage(error.message!);
+        setIsLoading(false);
+        return;
       } else {
-        setIsLoading(false)
+        setIsLoading(false);
         execute({
-          status: "pending",
+          status: 'pending',
           paymentIntentID: data.success.paymentIntentID,
           total: totalPrice,
           products: cart.map((item) => ({
@@ -92,21 +92,21 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
             variantID: item.variant.variantID,
             quantity: item.variant.quantity,
           })),
-        })
+        });
       }
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <AddressElement options={{ mode: "shipping" }} />
+      <AddressElement options={{ mode: 'shipping' }} />
       <Button
         className="my-4  w-full"
         disabled={!stripe || !elements || isLoading}
       >
-        {isLoading ? "Processing..." : "Pay now"}
+        {isLoading ? 'Processing...' : 'Pay now'}
       </Button>
     </form>
-  )
+  );
 }

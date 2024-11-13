@@ -1,7 +1,7 @@
-import { db } from "@/Server"
-import placeholder from "@/public/placeholder_small.jpg"
-import { DataTable } from "./DataTable"
-import { columns } from "./columns"
+import { db } from '@/Server';
+import placeholder from '@/public/placeholder_small.jpg';
+import { DataTable } from './DataTable';
+import { columns } from './columns';
 
 export default async function Products() {
   const products = await db.query.products.findMany({
@@ -9,8 +9,8 @@ export default async function Products() {
       productVariants: { with: { variantImages: true, variantTags: true } },
     },
     orderBy: (products, { desc }) => [desc(products.id)],
-  })
-  if (!products) throw new Error("No products found")
+  });
+  if (!products) throw new Error('No products found');
 
   const dataTable = products.map((product) => {
     if (product.productVariants.length === 0) {
@@ -20,21 +20,21 @@ export default async function Products() {
         price: product.price,
         image: placeholder.src,
         variants: [],
-      }
+      };
     }
-    const image = product.productVariants[0].variantImages[0].url
+    const image = product.productVariants[0].variantImages[0].url;
     return {
       id: product.id,
       title: product.title,
       price: product.price,
       variants: product.productVariants,
       image,
-    }
-  })
-  if (!dataTable) throw new Error("No data found")
+    };
+  });
+  if (!dataTable) throw new Error('No data found');
   return (
     <div>
       <DataTable columns={columns} data={dataTable} />
     </div>
-  )
+  );
 }

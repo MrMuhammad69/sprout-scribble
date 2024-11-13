@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from 'zod';
 
 export const paymentIntentSchema = z.object({
   amount: z.number(),
@@ -10,6 +10,6 @@ export const paymentIntentSchema = z.object({
       title: z.string(),
       price: z.number(),
       image: z.string(),
-    })
+    }),
   ),
-})
+});

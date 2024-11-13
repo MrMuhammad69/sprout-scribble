@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   ColumnDef,
@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 import {
   Card,
   CardContent,
@@ -17,7 +17,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -25,11 +25,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from "lucide-react"
+} from '@/components/ui/table';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -40,8 +40,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   return (
     <div className="rounded-md border">
@@ -70,10 +70,10 @@ export function DataTable<TData, TValue>({
               <Input
                 placeholder="Filter Products"
                 value={
-                  (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                  (table.getColumn('title')?.getFilterValue() as string) ?? ''
                 }
                 onChange={(event) =>
-                  table.getColumn("title")?.setFilterValue(event.target.value)
+                  table.getColumn('title')?.setFilterValue(event.target.value)
                 }
               />
             </div>
@@ -87,11 +87,11 @@ export function DataTable<TData, TValue>({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                         </TableHead>
-                      )
+                      );
                     })}
                   </TableRow>
                 ))}
@@ -101,13 +101,13 @@ export function DataTable<TData, TValue>({
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
+                      data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}
@@ -147,5 +147,5 @@ export function DataTable<TData, TValue>({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

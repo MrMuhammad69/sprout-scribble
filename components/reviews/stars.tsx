@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { cn } from "@/lib/utils"
-import { Star } from "lucide-react"
+import { cn } from '@/lib/utils';
+import { Star } from 'lucide-react';
 
 export default function Stars({
   rating,
@@ -19,8 +19,8 @@ export default function Stars({
           size={size}
           key={star}
           className={cn(
-            "text-primary bg-transparent transition-all duration-300 ease-in-out",
-            rating >= star ? "fill-primary" : "fill-transparent"
+            'text-primary bg-transparent transition-all duration-300 ease-in-out',
+            rating >= star ? 'fill-primary' : 'fill-transparent',
           )}
         ></Star>
       ))}
@@ -30,5 +30,5 @@ export default function Stars({
         </span>
       ) : null}
     </div>
-  )
+  );
 }

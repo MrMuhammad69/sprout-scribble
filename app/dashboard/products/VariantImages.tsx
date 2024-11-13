@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { VariantSchema } from "@/types/VariantSchema"
-import { useFieldArray, useFormContext } from "react-hook-form"
-import * as z from "zod"
+import { VariantSchema } from '@/types/VariantSchema';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import * as z from 'zod';
 import {
   Form,
   FormControl,
@@ -11,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { UploadDropzone } from "@/app/api/uploadthing/upload"
+} from '@/components/ui/form';
+import { UploadDropzone } from '@/app/api/uploadthing/upload';
 import {
   Table,
   TableBody,
@@ -21,40 +21,40 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { cn } from "@/lib/utils"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Trash } from "lucide-react"
-import { Reorder } from "framer-motion"
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Trash } from 'lucide-react';
+import { Reorder } from 'framer-motion';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 export default function VariantImages(){
-    const {getValues, control, setError} = useFormContext<z.infer<typeof VariantSchema>>()
-    const {fields, remove, append, update, move} = useFieldArray({
-        control,
-        name:'variantImages'
-    })
-    const [active, setActive] = useState(0)
-    return(
-        <div>
-            <FormField
-          control={control}
-          name="variantImages"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Variant Image</FormLabel>
-              <FormControl>
+  const {getValues, control, setError} = useFormContext<z.infer<typeof VariantSchema>>();
+  const {fields, remove, append, update, move} = useFieldArray({
+    control,
+    name:'variantImages',
+  });
+  const [active, setActive] = useState(0);
+  return(
+    <div>
+      <FormField
+        control={control}
+        name="variantImages"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Variant Image</FormLabel>
+            <FormControl>
               <UploadDropzone
                 className=" ut-allowed-content:text-secondary-foreground ut-label:text-primary ut-upload-icon:text-primary/50 hover:bg-primary/10 transition-all duration-500 ease-in-out border-secondary ut-button:bg-primary/75 ut-button:ut-readying:bg-secondary "
                 onUploadError={(error) => {
-                  console.log(error)
-                  setError("variantImages", {
-                    type: "validate",
+                  console.log(error);
+                  setError('variantImages', {
+                    type: 'validate',
                     message: error.message,
-                  })
-                  return
+                  });
+                  return;
                 }}
                 onBeforeUploadBegin={(files) => {
                   files.map((file) =>
@@ -62,36 +62,36 @@ export default function VariantImages(){
                       name: file.name,
                       size: file.size,
                       url: URL.createObjectURL(file),
-                    })
-                  )
-                  return files
+                    }),
+                  );
+                  return files;
                 }}
                 onClientUploadComplete={(files) => {
-                  const images = getValues("variantImages")
+                  const images = getValues('variantImages');
                   images.map((field, imgIDX) => {
-                    if (field.url.search("blob:") === 0) {
-                      const image = files.find((img) => img.name === field.name)
+                    if (field.url.search('blob:') === 0) {
+                      const image = files.find((img) => img.name === field.name);
                       if (image) {
                         update(imgIDX, {
                           url: image.url,
                           name: image.name,
                           size: image.size,
                           key: image.key,
-                        })
+                        });
                       }
                     }
-                  })
-                  return
+                  });
+                  return;
                 }}
-                config={{ mode: "auto" }}
+                config={{ mode: 'auto' }}
                 endpoint="variantUploader"
               />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="rounded-md overflow-x-auto">
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <div className="rounded-md overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -106,15 +106,15 @@ export default function VariantImages(){
             as="tbody"
             values={fields}
             onReorder={(e) => {
-              const activeElement = fields[active]
+              const activeElement = fields[active];
               e.map((item, index) => {
                 if (item === activeElement) {
-                  move(active, index)
-                  setActive(index)
-                  return
+                  move(active, index);
+                  setActive(index);
+                  return;
                 }
-                return
-              })
+                return;
+              });
             }}
           >
             {fields.map((field, index) => {
@@ -126,10 +126,10 @@ export default function VariantImages(){
                   id={field.id}
                   onDragStart={() => setActive(index)}
                   className={cn(
-                    field.url.search("blob:") === 0
-                      ? "animate-pulse transition-all"
-                      : "",
-                    "text-sm font-bold text-muted-foreground hover:text-primary"
+                    field.url.search('blob:') === 0
+                      ? 'animate-pulse transition-all'
+                      : '',
+                    'text-sm font-bold text-muted-foreground hover:text-primary',
                   )}
                 >
                   <TableCell>{index}</TableCell>
@@ -150,10 +150,10 @@ export default function VariantImages(){
                   </TableCell>
                   <TableCell>
                     <Button
-                      variant={"ghost"}
+                      variant={'ghost'}
                       onClick={(e) => {
-                        e.preventDefault()
-                        remove(index)
+                        e.preventDefault();
+                        remove(index);
                       }}
                       className="scale-75"
                     >
@@ -161,12 +161,12 @@ export default function VariantImages(){
                     </Button>
                   </TableCell>
                 </Reorder.Item>
-              )
+              );
             })}
           </Reorder.Group>
         </Table>
 
-        </div>
-        </div>
-    )
+      </div>
+    </div>
+  );
 }

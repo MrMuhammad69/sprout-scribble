@@ -1,10 +1,10 @@
-"use client"
-import { motion } from "framer-motion"
-import { useCartStore } from "@/lib/clientStore"
-import { Check, CreditCard, ShoppingCart } from "lucide-react"
+'use client';
+import { motion } from 'framer-motion';
+import { useCartStore } from '@/lib/clientStore';
+import { Check, CreditCard, ShoppingCart } from 'lucide-react';
 
 export default function CartProgress() {
-  const { checkoutProgress } = useCartStore()
+  const { checkoutProgress } = useCartStore();
   return (
     <div className="flex items-center justify-center pb-6">
       <div className="w-64 h-3 bg-muted rounded-md relative">
@@ -14,11 +14,11 @@ export default function CartProgress() {
             initial={{ width: 0 }}
             animate={{
               width:
-                checkoutProgress === "cart-page"
+                checkoutProgress === 'cart-page'
                   ? 0
-                  : checkoutProgress === "payment-page"
-                  ? "50%"
-                  : "100%",
+                  : checkoutProgress === 'payment-page'
+                    ? '50%'
+                    : '100%',
             }}
           />
           <motion.div
@@ -33,11 +33,11 @@ export default function CartProgress() {
             initial={{ scale: 0 }}
             animate={{
               scale:
-                checkoutProgress === "payment-page"
+                checkoutProgress === 'payment-page'
                   ? 1
-                  : 0 || checkoutProgress === "confirmation-page"
-                  ? 1
-                  : 0,
+                  : 0 || checkoutProgress === 'confirmation-page'
+                    ? 1
+                    : 0,
             }}
             transition={{ delay: 0.25 }}
             className="bg-primary rounded-full p-2 z-50"
@@ -47,7 +47,7 @@ export default function CartProgress() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{
-              scale: checkoutProgress === "confirmation-page" ? 1 : 0,
+              scale: checkoutProgress === 'confirmation-page' ? 1 : 0,
             }}
             transition={{ delay: 0.25 }}
             className="bg-primary rounded-full p-2 z-50"
@@ -57,5 +57,5 @@ export default function CartProgress() {
         </div>
       </div>
     </div>
-  )
+  );
 }

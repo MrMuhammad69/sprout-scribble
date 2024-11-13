@@ -1,18 +1,18 @@
-"use server"
+'use server';
 
-import { createOrderSchema } from "@/types/orderSchem"
-import { createSafeActionClient } from "next-safe-action"
-import { auth } from "../auth"
-import { db } from "@/Server"
-import { orderProduct, orders } from "../schema"
+import { createOrderSchema } from '@/types/orderSchem';
+import { createSafeActionClient } from 'next-safe-action';
+import { auth } from '../auth';
+import { db } from '@/Server';
+import { orderProduct, orders } from '../schema';
 
-const action = createSafeActionClient()
+const action = createSafeActionClient();
 
 export const createOrder = action(
   createOrderSchema,
   async ({ products, status, total, paymentIntentID }) => {
-    const user = await auth()
-    if (!user) return { error: "user not found" }
+    const user = await auth();
+    if (!user) return { error: 'user not found' };
 
     const order = await db
       .insert(orders)
@@ -22,7 +22,7 @@ export const createOrder = action(
         total,
         userID: user.user.id,
       })
-      .returning()
+      .returning();
     const orderProducts = products.map(
       async ({ productID, quantity, variantID }) => {
         const newOrderProduct = await db.insert(orderProduct).values({
@@ -30,9 +30,9 @@ export const createOrder = action(
           orderID: order[0].id,
           productID: productID,
           productVariantID: variantID,
-        })
-      }
-    )
-    return { success: "Order has been added" }
-  }
-)
+        });
+      },
+    );
+    return { success: 'Order has been added' };
+  },
+);

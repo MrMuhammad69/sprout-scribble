@@ -1,48 +1,48 @@
-import checkDate from "./check-data"
+import checkDate from './check-data';
 
 export const weeklyChart = (chartItems: { date: Date; revenue: number }[]) => {
   return [
     {
-      date: "6d ago",
+      date: '6d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 6))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "5d ago",
+      date: '5d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 5))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "4d ago",
+      date: '4d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 4))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "3d ago",
+      date: '3d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 3))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "2d ago",
+      date: '2d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 2))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "1d ago",
+      date: '1d ago',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 1))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
     {
-      date: "today",
+      date: 'today',
       revenue: chartItems
         .filter((order) => checkDate(order.date, 0))
         .reduce((acc, price) => acc + price.revenue, 0),
     },
-  ]
-}
+  ];
+};

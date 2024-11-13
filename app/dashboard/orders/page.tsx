@@ -1,8 +1,8 @@
-import { db } from "@/Server"
-import { auth } from "@/Server/auth"
-import { orders } from "@/Server/schema"
-import { eq } from "drizzle-orm"
-import { redirect } from "next/navigation"
+import { db } from '@/Server';
+import { auth } from '@/Server/auth';
+import { orders } from '@/Server/schema';
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 import {
   Card,
   CardContent,
@@ -19,10 +19,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import { formatDistance, subMinutes } from "date-fns"
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { formatDistance, subMinutes } from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -30,22 +30,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { MoreHorizontal } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function Page() {
-  const user = await auth()
+  const user = await auth();
   if (!user) {
-    redirect("/login")
+    redirect('/login');
   }
   const userOrders = await db.query.orders.findMany({
     where: eq(orders.userID, user.user.id),
@@ -58,7 +58,7 @@ export default async function Page() {
         },
       },
     },
-  })
+  });
   return (
     <Card>
       <CardHeader>
@@ -85,9 +85,9 @@ export default async function Page() {
                 <TableCell>
                   <Badge
                     className={
-                      order.status === "succeeded"
-                        ? "bg-green-700 hover:bg-green-800"
-                        : "bg-yellow-700 hover:bg-yellow-800"
+                      order.status === 'succeeded'
+                        ? 'bg-green-700 hover:bg-green-800'
+                        : 'bg-yellow-700 hover:bg-yellow-800'
                     }
                   >
                     {order.status}
@@ -102,14 +102,14 @@ export default async function Page() {
                   <Dialog modal={false} >
                     <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"}>
+                        <Button variant={'ghost'}>
                           <MoreHorizontal size={16} />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem>
                           <DialogTrigger>
-                            <Button className="w-full" variant={"ghost"}>
+                            <Button className="w-full" variant={'ghost'}>
                               View Details
                             </Button>
                           </DialogTrigger>
@@ -119,7 +119,7 @@ export default async function Page() {
                             <Button
                               asChild
                               className="w-full"
-                              variant={"ghost"}
+                              variant={'ghost'}
                             >
                               <Link href={order.receiptURL} target="_blank">
                                 Download Receipt
@@ -171,7 +171,7 @@ export default async function Page() {
                                   </TableCell>
                                   <TableCell>{quantity}</TableCell>
                                 </TableRow>
-                              )
+                              ),
                             )}
                           </TableBody>
                         </Table>
@@ -185,5 +185,5 @@ export default async function Page() {
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import "./globals.css";
-import Nav from "@/components/navigation/nav";
-import { cn } from "@/lib/utils";
-import { Inter, Roboto, Roboto_Flex, Roboto_Serif } from "next/font/google";
-import { SessionProvider } from "next-auth/react"
-import { ThemeProvider } from "@/components/providers/theme.providers";
-import Toaster from "@/components/ui/toast";
-import MyName from "@/components/myName";
+import './globals.css';
+import Nav from '@/components/navigation/nav';
+import { cn } from '@/lib/utils';
+import { Inter, Roboto, Roboto_Flex, Roboto_Serif } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from '@/components/providers/theme.providers';
+import Toaster from '@/components/ui/toast';
+import MyName from '@/components/myName';
 
 
-const roboto = Inter({ weight: ["400", '500', '700', '900'], subsets: ["latin"] });
+const roboto = Inter({ weight: ['400', '500', '700', '900'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Sprout & Scribble",
-  description: "Created By Muhammad Bin Abdul Latif",
+  title: 'Sprout & Scribble',
+  description: 'Created By Muhammad Bin Abdul Latif',
 };
 
 export default function RootLayout({

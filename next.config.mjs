@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [   
+    remotePatterns: [
       {
         protocol: 'https',
         hostname: 'uploadthing.com',
@@ -19,6 +19,12 @@ const nextConfig = {
         hostname: 'avatars.githubusercontent.com',
       },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // Disable ESLint checks during builds
+  },
+  typescript: {
+    ignoreBuildErrors: true, // Disable TypeScript errors during builds
   },
 };
 

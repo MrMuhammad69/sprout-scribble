@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { BackButton } from "./backButton"
-import Socials from "./Socials"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { BackButton } from './backButton';
+import Socials from './Socials';
 
 
 type CardWrapperProps = {
@@ -12,28 +12,28 @@ type CardWrapperProps = {
 }
 
 export const AuthCard = ({
-    children,
-    cardTitle,
-    backButtonHref,
-    backButtonLabel,
-    showSocials
+  children,
+  cardTitle,
+  backButtonHref,
+  backButtonLabel,
+  showSocials,
 }: CardWrapperProps) => {   
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>{cardTitle}</CardTitle>
-            <CardContent>
-                {children}
-            </CardContent>
-            {showSocials && (
-                <CardFooter>
-                    <Socials />
-                </CardFooter>
-            )}
-            <CardFooter>
-                <BackButton href={backButtonHref} label={backButtonLabel} />
-            </CardFooter>
-            </CardHeader>
-        </Card>
-    )
-} 
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{cardTitle}</CardTitle>
+        <CardContent>
+          {children}
+        </CardContent>
+        {showSocials && (
+          <CardFooter>
+            <Socials />
+          </CardFooter>
+        )}
+        <CardFooter>
+          <BackButton href={backButtonHref} label={backButtonLabel} />
+        </CardFooter>
+      </CardHeader>
+    </Card>
+  );
+}; 

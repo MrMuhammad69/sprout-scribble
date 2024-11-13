@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import { cn } from "@/lib/utils"
-import { AnimatePresence, motion } from "framer-motion"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function DashboardNav({
   allLinks,
 }: {
   allLinks: { label: string; href: string; icon: JSX.Element }[]
 }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <nav className="py-2 overflow-auto mb-4">
       <ul className="flex gap-6 text-xs font-semibold ">
@@ -19,8 +19,8 @@ export default function DashboardNav({
             <motion.li whileTap={{ scale: 0.95 }} key={link.href} >
               <Link
                 className={cn(
-                  "flex gap-1 flex-col items-center relative",
-                  pathname === link.href && "text-primary"
+                  'flex gap-1 flex-col items-center relative',
+                  pathname === link.href && 'text-primary',
                 )}
                 href={link.href}
               >
@@ -32,7 +32,7 @@ export default function DashboardNav({
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
                     layoutId="underline"
-                    transition={{ type: "spring", stiffness: 35 }}
+                    transition={{ type: 'spring', stiffness: 35 }}
                   />
                 ) : null}
               </Link>
@@ -41,5 +41,5 @@ export default function DashboardNav({
         </AnimatePresence>
       </ul>
     </nav>
-  )
+  );
 }

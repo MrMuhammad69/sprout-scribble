@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
 import { useEffect, useState } from 'react';
-import { Toaster as Toasty } from "sonner";
-import { useTheme } from "next-themes";
+import { Toaster as Toasty } from 'sonner';
+import { useTheme } from 'next-themes';
 
 export default function Toaster() {
   const { theme } = useTheme();
@@ -12,12 +12,12 @@ export default function Toaster() {
     setMounted(true);
   }, []);
 
-  if (!mounted || typeof theme !== "string") return null;
+  if (!mounted || typeof theme !== 'string') return null;
 
   return (
     <Toasty
       richColors
-      theme={theme as "light" | "dark" | "system" | undefined}
+      theme={theme as 'light' | 'dark' | 'system' | undefined}
     />
   );
 }

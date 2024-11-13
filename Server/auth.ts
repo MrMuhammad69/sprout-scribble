@@ -1,13 +1,13 @@
-import NextAuth from "next-auth";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/Server";
-import google from "next-auth/providers/google";
-import github from "next-auth/providers/github";
-import Credentials from "@auth/core/providers/credentials";
-import { loginSchema } from "@/types/login-schema";
-import { eq } from "drizzle-orm";
-import { accounts, users } from "./schema";
-import bcrypt from "bcrypt";
+import NextAuth from 'next-auth';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import { db } from '@/Server';
+import google from 'next-auth/providers/google';
+import github from 'next-auth/providers/github';
+import Credentials from '@auth/core/providers/credentials';
+import { loginSchema } from '@/types/login-schema';
+import { eq } from 'drizzle-orm';
+import { accounts, users } from './schema';
+import bcrypt from 'bcrypt';
 
 export const authConfig = {
   adapter: DrizzleAdapter(db),
@@ -17,14 +17,14 @@ export const authConfig = {
     error: '/auth/error',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   callbacks: {
     async session({ session, token }) {
       if (token.sub) {
         // Always fetch fresh user data from the database
         const currentUser = await db.query.users.findFirst({
-          where: eq(users.id, token.sub)
+          where: eq(users.id, token.sub),
         });
 
         if (currentUser) {
@@ -47,13 +47,13 @@ export const authConfig = {
       
       // Always fetch fresh user data
       const existingUser = await db.query.users.findFirst({
-        where: eq(users.id, token.sub)
+        where: eq(users.id, token.sub),
       });
       
       if(!existingUser) return token;
       
       const existingAccount = await db.query.accounts.findFirst({
-        where: eq(accounts.userId, existingUser.id)
+        where: eq(accounts.userId, existingUser.id),
       });
 
       token.isOAuth = !!existingAccount;
@@ -68,9 +68,9 @@ export const authConfig = {
     async signIn({ user, account, profile, email }) {
       if (!user.email) return false;
 
-      if (account?.provider === "google" || account?.provider === "github") {
+      if (account?.provider === 'google' || account?.provider === 'github') {
         const existingUser = await db.query.users.findFirst({
-          where: eq(users.email, user.email)
+          where: eq(users.email, user.email),
         });
 
         // If user exists but used different provider
@@ -89,7 +89,7 @@ export const authConfig = {
       }
       
       return true;
-    }
+    },
   },
   providers: [
     google({
@@ -120,7 +120,7 @@ export const authConfig = {
         return user;
       },
     }),
-  ]
+  ],
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

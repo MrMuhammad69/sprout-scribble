@@ -1,5 +1,5 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type Variant = {
   variantID: number
@@ -16,9 +16,9 @@ export type CartItem = {
 
 export type CartState = {
   cart: CartItem[]
-  checkoutProgress: "cart-page" | "payment-page" | "confirmation-page"
+  checkoutProgress: 'cart-page' | 'payment-page' | 'confirmation-page'
   setCheckoutProgress: (
-    val: "cart-page" | "payment-page" | "confirmation-page"
+    val: 'cart-page' | 'payment-page' | 'confirmation-page'
   ) => void
   addToCart: (item: CartItem) => void
   removeFromCart: (item: CartItem) => void
@@ -34,13 +34,13 @@ export const useCartStore = create<CartState>()(
       cartOpen: false,
       setCartOpen: (val) => set({ cartOpen: val }),
       clearCart: () => set({ cart: [] }),
-      checkoutProgress: "cart-page",
+      checkoutProgress: 'cart-page',
       setCheckoutProgress: (val) => set((state) => ({ checkoutProgress: val })),
       addToCart: (item) =>
         set((state) => {
           const existingItem = state.cart.find(
-            (cartItem) => cartItem.variant.variantID === item.variant.variantID
-          )
+            (cartItem) => cartItem.variant.variantID === item.variant.variantID,
+          );
           if (existingItem) {
             const updatedCart = state.cart.map((cartItem) => {
               if (cartItem.variant.variantID === item.variant.variantID) {
@@ -50,11 +50,11 @@ export const useCartStore = create<CartState>()(
                     ...cartItem.variant,
                     quantity: cartItem.variant.quantity + item.variant.quantity,
                   },
-                }
+                };
               }
-              return cartItem
-            })
-            return { cart: updatedCart }
+              return cartItem;
+            });
+            return { cart: updatedCart };
           } else {
             return {
               cart: [
@@ -67,7 +67,7 @@ export const useCartStore = create<CartState>()(
                   },
                 },
               ],
-            }
+            };
           }
         }),
       removeFromCart: (item) =>
@@ -80,15 +80,15 @@ export const useCartStore = create<CartState>()(
                   ...cartItem.variant,
                   quantity: cartItem.variant.quantity - 1,
                 },
-              }
+              };
             }
-            return cartItem
-          })
+            return cartItem;
+          });
           return {
             cart: updatedCart.filter((item) => item.variant.quantity > 0),
-          }
+          };
         }),
     }),
-    { name: "cart-storage" }
-  )
-)
+    { name: 'cart-storage' },
+  ),
+);

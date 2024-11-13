@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { Input, InputProps } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { Dispatch, SetStateAction, forwardRef, useState } from "react"
-import { useFormContext } from "react-hook-form"
-import { AnimatePresence, motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { XIcon } from "lucide-react"
+import { Input, InputProps } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { Dispatch, SetStateAction, forwardRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { XIcon } from 'lucide-react';
 
 type InputTagsProps = InputProps & {
   value: string[]
@@ -16,28 +16,28 @@ type InputTagsProps = InputProps & {
 
 export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
   ({ onChange, value, ...props }, ref) => {
-    const [pendingDataPoint, setPendingDataPoint] = useState("")
-    const [focused, setFocused] = useState(false)
+    const [pendingDataPoint, setPendingDataPoint] = useState('');
+    const [focused, setFocused] = useState(false);
 
     function addPendingDataPoint() {
       if (pendingDataPoint) {
-        const newDataPoints = new Set([...value, pendingDataPoint])
-        onChange(Array.from(newDataPoints))
-        setPendingDataPoint("")
+        const newDataPoints = new Set([...value, pendingDataPoint]);
+        onChange(Array.from(newDataPoints));
+        setPendingDataPoint('');
       }
     }
 
-    const { setFocus } = useFormContext()
+    const { setFocus } = useFormContext();
 
     return (
       <div
         className={cn(
-          "w-full rounded-lg border border-input bg-background  text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          'w-full rounded-lg border border-input bg-background  text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           focused
-            ? "ring-offset-2 outline-none ring-ring ring-2"
-            : "ring-offset-0 outline-none ring-ring ring-0"
+            ? 'ring-offset-2 outline-none ring-ring ring-2'
+            : 'ring-offset-0 outline-none ring-ring ring-0',
         )}
-        onClick={() => setFocus("tags")}
+        onClick={() => setFocus('tags')}
       >
         <motion.div className="rounded-md min-h-[2.5rem]  p-2 flex gap-2 flex-wrap items-center">
           <AnimatePresence>
@@ -48,7 +48,7 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
                 exit={{ scale: 0 }}
                 key={tag}
               >
-                <Badge variant={"secondary"}>
+                <Badge variant={'secondary'}>
                   {tag}
                   <button
                     className="w-3 ml-1"
@@ -65,19 +65,19 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
               className="focus-visible:border-transparent border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 "
               placeholder="Add tags"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault()
-                  addPendingDataPoint()
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addPendingDataPoint();
                 }
                 if (
-                  e.key === "Backspace" &&
+                  e.key === 'Backspace' &&
                   !pendingDataPoint &&
                   value.length > 0
                 ) {
-                  e.preventDefault()
-                  const newValue = [...value]
-                  newValue.pop()
-                  onChange(newValue)
+                  e.preventDefault();
+                  const newValue = [...value];
+                  newValue.pop();
+                  onChange(newValue);
                 }
               }}
               value={pendingDataPoint}
@@ -89,8 +89,8 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
           </div>
         </motion.div>
       </div>
-    )
-  }
-)
+    );
+  },
+);
 
-InputTags.displayName = "InputTags"
+InputTags.displayName = 'InputTags';
