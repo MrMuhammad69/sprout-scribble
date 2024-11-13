@@ -22,6 +22,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { CheckCircle2 } from 'lucide-react';
 
 
 // Define LoginForm component
@@ -165,7 +166,10 @@ export const LoginForm = () => {
           
           <FormSuccess message={success} />
           <FormError message={error} />
-
+          <div className="bg-teal-400 flex items-center gap-2 text-xs font-medium my-4 text-secondary-foreground p-3 rounded-md">
+            <CheckCircle2 />
+            <p>Email login is currently not working because you have to give a premium for that. Try google or github login</p>
+          </div>
           <Button 
             type="submit" 
             className={cn('w-full my-2', 
@@ -174,7 +178,7 @@ export const LoginForm = () => {
             disabled={status === 'executing'}
           >
             {showTwoFactor && status === 'executing'? 'Verifying...': 'Verify'}
-            {!showTwoFactor && status === 'executing'? 'Logging in...': 'Login'}
+            {status === 'executing'? 'Logging in...': 'Login'}
 
           </Button>
         </form>
